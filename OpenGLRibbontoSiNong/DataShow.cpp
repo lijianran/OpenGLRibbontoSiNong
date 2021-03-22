@@ -35,8 +35,8 @@ CDataShow::CDataShow(void)             //datashow类构造函数
 
 	camPos[0]=0.0f;
 	camPos[1]=0.0f;
-	camPos[2]=-60.0f;
-	camRot[0]=-70.0f;
+	camPos[2]=-25.0f;
+	camRot[0]=-50.0f;
 	camRot[1]=0.0f;
 	camRot[2]=0.0f;
 
@@ -77,8 +77,8 @@ CDataShow::CDataShow(void)             //datashow类构造函数
 	x_rotate=0;
 	y_rotate=0;
 	z_rotate=0;  
-	//缩放比例
 
+	//缩放比例
 	m_zoom=1;				
 
 	//记录鼠标按下时的坐标位置
@@ -87,7 +87,7 @@ CDataShow::CDataShow(void)             //datashow类构造函数
 	z_before1=0,z_before2=0;
 	m_nButtonFlag=other;
 	m_NumPixel= 5;
-	//SetCamPos(2, 1500, TRUE, TRUE);
+	//SetCamPos(2, 50, TRUE, TRUE);
 }
 
 CDataShow::~CDataShow(void)
@@ -152,9 +152,9 @@ BOOL CDataShow::SetWindowPixelFormat(HDC hDC)
 // CreateViewGLContext
 // Create an OpenGL rendering context
 //********************************************
-BOOL CDataShow::CreateViewGLContext(HDC hDC)
+BOOL CDataShow::CreateViewGLContext(HDC hDC)   ////产生RC并使之成为当前RC
 {
-	m_hGLContext = wglCreateContext(hDC);    //创建一个新的opengl渲染着色描述表
+	m_hGLContext = wglCreateContext(hDC);      //创建一个新的opengl渲染着色描述表
 	
 	if(m_hGLContext==NULL)
 		return FALSE;
@@ -165,7 +165,7 @@ BOOL CDataShow::CreateViewGLContext(HDC hDC)
 	return TRUE;  
 }
 
-void CDataShow::InitialScene(CPaintDC& dc,HDC hDC)   //保存实例
+void CDataShow::InitialScene(CPaintDC& dc,HDC hDC)                     //保存实例，以便重绘。
 {
 	glClearColor(0.0,0.0,0.078,1); //0.192 0.078
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);   //表示清除颜色缓冲以及深度缓冲
@@ -181,19 +181,22 @@ void CDataShow::InitialScene(CPaintDC& dc,HDC hDC)   //保存实例
 	glTranslatef(camPos[0],camPos[1],camPos[2]);//放大缩小  通过移动物体来实现放大缩小
 	//glScalef(0.1, 0.1, 0.1);  
 
-	//glRotatef(camRot[0],1.0f,0.0f,0.0f);
-	//glRotatef(camRot[1],0.0f,1.0f,0.0f);
-	//glRotatef(camRot[2],0.0f,0.0f,1.0f);
-	////::glPushMatrix();
-	//glTranslatef(scenePos[0],scenePos[1],scenePos[2]);	//无用
-	//glRotatef(sceneRot[0],1.0f,0.0f,0.0f);//绕x轴旋转
-	//glRotatef(sceneRot[1],0.0f,1.0f,0.0f);//绕y轴旋转
-	//glRotatef(sceneRot[2],0.0f,0.0f,1.0f);//绕z轴旋转
-
+	glRotatef(camRot[0],1.0f,0.0f,0.0f);
+	glRotatef(camRot[1],0.0f,1.0f,0.0f);
+	glRotatef(camRot[2],0.0f,0.0f,1.0f);
+	//::glPushMatrix();
+	glTranslatef(scenePos[0],scenePos[1],scenePos[2]);	//无用
+	glRotatef(sceneRot[0],1.0f,0.0f,0.0f);//绕x轴旋转
+	glRotatef(sceneRot[1],0.0f,1.0f,0.0f);//绕y轴旋转
+	glRotatef(sceneRot[2],0.0f,0.0f,1.0f);//绕z轴旋转
 
 	glGetIntegerv(GL_VIEWPORT, viewport);   /* 获取三个矩阵 */
-	glGetDoublev(GL_MODELVIEW_MATRIX, mvmatrix);
 	glGetDoublev(GL_PROJECTION_MATRIX, projmatrix);
+	glGetDoublev(GL_MODELVIEW_MATRIX, mvmatrix);
+	
+
+
+
 	//开始画图
 	//Draw_compass(20,-15,0.0); // 罗盘
 	//Draw_grid(10); // 网格
@@ -202,10 +205,7 @@ void CDataShow::InitialScene(CPaintDC& dc,HDC hDC)   //保存实例
 	//Draw_coordinate();
 	//::glPopMatrix();
 	//
-	
-	
-	
-
+	//
 	//m_fpointFunc();
 	////SwapBuffers(dc.m_ps.hdc);
 	
@@ -221,10 +221,11 @@ void CDataShow::OnLButtonDown(UINT nFlags, CPoint point)                     //�
 	x_lbefore=point.x;
 	y_lbefore=point.y;
 
-	mouseleftdown=TRUE;
-	mouseprevpoint.x=point.x;
-	mouseprevpoint.y=point.y;
-//	SetCapture();
+	//mouseleftdown=TRUE;
+	//mouseprevpoint.x=point.x;
+	//mouseprevpoint.y=point.y;
+
+    //SetCapture();
 }
 void CDataShow::OnLButtonUp(UINT nFlags, CPoint point)                     //左键弹起
 {
@@ -238,20 +239,21 @@ void CDataShow::OnLButtonUp(UINT nFlags, CPoint point)                     //左
 
 	//this->InitialScene();
 
-	mouseleftdown=FALSE;
-	SetSceneRot(0,(point.y-mouseprevpoint.y),TRUE,TRUE);//旋转x轴
-	SetSceneRot(2,(point.x-mouseprevpoint.x),TRUE,TRUE);//旋转y轴
+	//mouseleftdown=FALSE;
+	//SetSceneRot(0,(point.y-mouseprevpoint.y),TRUE,TRUE);//改变绕x轴旋转的角度     完成移动鼠标中的最后一次任务
+	//SetSceneRot(2,(point.x-mouseprevpoint.x),TRUE,TRUE);//改变绕z轴旋转的角度
 }
 void CDataShow::OnRButtonDown(UINT nFlags, CPoint point)                //右键按下
 {
 	mouserightdown = TRUE;
+	mouseprevpoint.x = point.x;
+	mouseprevpoint.y = point.y;
 
 	x_rbefore=point.x;
 	y_rbefore=point.y;
 }
 void CDataShow::OnRButtonUp(UINT nFlags, CPoint point)                   //右键弹起
 {
-	mouserightdown = FALSE;
 	y_rotate -= (point.x - x_rbefore) / 100;        //模型旋转
 	x_rotate -= (y_rbefore - point.y) / 100;
 
@@ -263,6 +265,10 @@ void CDataShow::OnRButtonUp(UINT nFlags, CPoint point)                   //右�
 		y_rotate=y_rotate - 360;
 	if (y_rotate < -360)
 		y_rotate=y_rotate + 360;
+
+	mouserightdown = FALSE;
+	SetSceneRot(0, (point.y - mouseprevpoint.y), TRUE, TRUE);//改变绕x轴旋转的角度     完成移动鼠标中的最后一次任务
+	SetSceneRot(2, (point.x - mouseprevpoint.x), TRUE, TRUE);//改变绕z轴旋转的角度
 }
 
 BOOL CDataShow::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)     //由view类响应鼠标滑轮消息转入  缩放
@@ -287,21 +293,19 @@ BOOL CDataShow::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)     //由view
 
 void CDataShow::OnMouseMove(UINT nFlags, CPoint point)                    //鼠标移动
 {
-	if (mouserightdown)//一直为假
+	if (mouserightdown)     //右键按下为真，弹起为假
 	{
-		SetCamPos(2, -(point.y - mouseprevpoint.y), TRUE, TRUE);
+		SetSceneRot(0, (point.y - mouseprevpoint.y), TRUE, TRUE);
+		SetSceneRot(2, (point.x - mouseprevpoint.x), TRUE, TRUE);
 	}
 	else if (mouseleftdown)     //左键按下为真，弹起为假          按住左键来旋转
 	{
 		SetSceneRot(0, (point.y - mouseprevpoint.y), TRUE, TRUE);
 		SetSceneRot(2, (point.x - mouseprevpoint.x), TRUE, TRUE);
 	}
-	mouseprevpoint.x = point.x;
+	mouseprevpoint.x = point.x;   //不断改变起点
 	mouseprevpoint.y = point.y;
 }
-
-
-
 
 
 
@@ -319,7 +323,7 @@ void CDataShow::SetOneViewFocus(int index)  //重置视角
 	//z_rotate=m_ViewfocusM[index].z_rotate;
 }
 
-void CDataShow::Draw_compass(double x,double y,double z)      //画罗盘
+void CDataShow::Draw_compass(double x,double y,double z)                     //画罗盘
 {
 //    int viewport[4];
 //    int pos[2] = { -50, -50 };
@@ -466,43 +470,9 @@ void CDataShow::Draw_grid (int meters_per_grid)               //画网格   由v
 
 	glPopMatrix ();      //还原到使用glpPushMrtrix()入栈前的矩阵，复原
 }
-void CDataShow::Draw_Road_Center_Point() //坐标系
-{
-	/*glLineWidth(3);
-	
-	glBegin(GL_LINES);
-	glColor3f(0,1,0);
-	glVertex3d(0,0,0);
-	glVertex3d(10,0,0);	
-	glEnd();
-	glBegin(GL_TRIANGLES);
-	glVertex3f(10,1,0);
-	glVertex3f(10,-1,0);
-	glVertex3f(12,0,0);
-	glEnd();*/
-
-	/*glEnable(GL_DEPTH_TEST);
-	glEnable(GL_AUTO_NORMAL);
-	glColor3f(1,1,0);
-	glTranslatef(40,30,15);
-	glutSolidSphere(2,50,50);
-	glTranslatef(-40,-30,-15);
-	glDisable(GL_LIGHTING);*/
-	
-	/*glColor3f(1,0,0);
-	glBegin(GL_LINES);
-	glVertex3d(0,0,0);
-	glVertex3d(0,10,0);
-	glEnd();
-	glBegin(GL_TRIANGLES);
-	glVertex3f(1,10,0);
-	glVertex3f(-1.0,10,0);
-	glVertex3f(0,12.0,0);
-	glEnd();*/
-}
 
 
-int CDataShow::OnCreate(HWND hWnd)       //响应VIEW.CPP中的创建窗口函数
+int CDataShow::OnCreate(HWND hWnd)         //响应VIEW.CPP中的创建窗口函数
 {
 	
 	// TODO:  在此添加您专用的创建代码
@@ -512,17 +482,14 @@ int CDataShow::OnCreate(HWND hWnd)       //响应VIEW.CPP中的创建窗口函�
 		return 0;
 
 	if(CreateViewGLContext(hDC)==FALSE)    //创建上下文渲染描述表，
-		return 0;							//创建渲染描述表之前应该仙设置设备描述表的像素格式
-		
-	// TODO:  Add your specialized creation code here
-	
+		return 0;						   ////创建渲染描述表之前应该仙设置设备描述表的像素格式
+
 	return 0;
 }
 
 void CDataShow::OnSize(UINT nType, int cx, int cy)      //窗口变化
 {
 	glViewport(0,0,cx,cy);
-
 	GLdouble aspect_ratio;
 	aspect_ratio=(GLdouble)cx/(GLdouble)cy;
 	::glMatrixMode(GL_PROJECTION);
@@ -530,6 +497,7 @@ void CDataShow::OnSize(UINT nType, int cx, int cy)      //窗口变化
 	gluPerspective(90.0f,aspect_ratio,10.0f,900.0f);
 	::glMatrixMode(GL_MODELVIEW);
 	::glLoadIdentity();
+	glDrawBuffer(GL_BACK);
 }
 
 void CDataShow::SetCamPos(int axis,int value,BOOL increment,BOOL apply)   //鼠标滑轮进行缩放
@@ -546,7 +514,7 @@ void CDataShow::SetCamPos(int axis,int value,BOOL increment,BOOL apply)   //鼠�
 	::glLoadIdentity();       //将当前的用户坐标系的原点移到了屏幕中心：类似于一个复位操作
 }
 
-void CDataShow::SetSceneRot(int axis,int value,BOOL increment,BOOL apply)
+void CDataShow::SetSceneRot(int axis,int value,BOOL increment,BOOL apply)   //0 2   移动数值   true true
 {
 	/*if (increment)
 	{
@@ -556,27 +524,29 @@ void CDataShow::SetSceneRot(int axis,int value,BOOL increment,BOOL apply)
 	{
 	sceneRot[axis]+=(sceneRot[axis]>=360)?(-360+value/2):value/2;
 	}*/
-	sceneRot[axis]+=(sceneRot[axis]>=360)?(-360+value/2):value/2;   //旋转角度的改变
+
+	sceneRot[axis]+=(sceneRot[axis]>=360)?(-360+value/2):value/2;            //旋转角度的改变
 }
 
-void CDataShow::SetView(float f)
+void CDataShow::SetView(float f)       //无用
 {
-	camPos[0]=0.0f;
-	camPos[1]=0.0f;
-	camPos[2]=-60.0f;
-	camRot[0]=f;
-	camRot[1]=0.0f;
-	camRot[2]=0.0f;
-	scenePos[0]=0.0f;
-	scenePos[1]=0.0f;
-	scenePos[2]=0.0f;
-	sceneRot[0]=0.0f;
-	sceneRot[1]=0.0f;
-	sceneRot[2]=0.0f;
+	camPos[0] = 0.0f;
+	camPos[1] = 0.0f;
+	camPos[2] = -60.0f;
+	camRot[0] = -70.0f;
+	camRot[1] = 0.0f;
+	camRot[2] = 0.0f;
+
+	scenePos[0] = 0.0f;
+	scenePos[1] = 0.0f;
+	scenePos[2] = 0.0f;
+	sceneRot[0] = 0.0f;
+	sceneRot[1] = 0.0f;
+	sceneRot[2] = 0.0f;
 }
 
 
-void CDataShow::Draw_circle(int radious, int meters_per_difference)    //5  5 画圆盘坐标系
+void CDataShow::Draw_circle(int radious, int meters_per_difference)           //5  5 画圆盘坐标系
 {
 	glLineWidth(1);
 	glColor3f (0.3, 0.3, 0.3);
@@ -623,5 +593,39 @@ void CDataShow::Draw_coordinate() //画坐标系和箭头
 	glEnd();
 
 	draw_letter_N();  //画四边形   "N"
-	//glutSolidCone(0.5,1.5,20,20);
+	//glutSolidCone(0.5,1.5,20,20);//画圆锥
+}
+void CDataShow::Draw_Road_Center_Point() //坐标系
+{
+	/*glLineWidth(3);
+
+	glBegin(GL_LINES);
+	glColor3f(0,1,0);
+	glVertex3d(0,0,0);
+	glVertex3d(10,0,0);
+	glEnd();
+	glBegin(GL_TRIANGLES);
+	glVertex3f(10,1,0);
+	glVertex3f(10,-1,0);
+	glVertex3f(12,0,0);
+	glEnd();*/
+
+	/*glEnable(GL_DEPTH_TEST);
+	glEnable(GL_AUTO_NORMAL);
+	glColor3f(1,1,0);
+	glTranslatef(40,30,15);
+	glutSolidSphere(2,50,50);
+	glTranslatef(-40,-30,-15);
+	glDisable(GL_LIGHTING);*/
+
+	/*glColor3f(1,0,0);
+	glBegin(GL_LINES);
+	glVertex3d(0,0,0);
+	glVertex3d(0,10,0);
+	glEnd();
+	glBegin(GL_TRIANGLES);
+	glVertex3f(1,10,0);
+	glVertex3f(-1.0,10,0);
+	glVertex3f(0,12.0,0);
+	glEnd();*/
 }

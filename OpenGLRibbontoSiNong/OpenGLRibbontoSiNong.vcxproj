@@ -21,14 +21,14 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B75C1F45-7612-4701-B10E-32DCA37EAB96}</ProjectGuid>
     <RootNamespace>OpenGLRibbontoSiNong</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
     <Keyword>MFCProj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
@@ -197,6 +197,8 @@
     <ClInclude Include="CreDrawDatas.h" />
     <ClInclude Include="DataShow.h" />
     <ClInclude Include="FileView.h" />
+    <ClInclude Include="Function_CurveClothoid.h" />
+    <ClInclude Include="Function_dubins.h" />
     <ClInclude Include="GenerateRandomPoint.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="OpenGLRibbontoSiNong.h" />
@@ -215,6 +217,8 @@
     <ClCompile Include="CreDrawDatas.cpp" />
     <ClCompile Include="DataShow.cpp" />
     <ClCompile Include="FileView.cpp" />
+    <ClCompile Include="Function_CurveClothoid.cpp" />
+    <ClCompile Include="Function_dubins.cpp" />
     <ClCompile Include="GenerateRandomPoint.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="OpenGLRibbontoSiNong.cpp" />

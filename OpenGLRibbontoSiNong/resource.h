@@ -110,21 +110,20 @@
 #define ID_POINT                        32787
 #define ID_LINE                         32788
 #define ID_RECTANGLE                    32789
-#define ID_BUTTON3                      32790
-#define ID_BUTTON2                      32791
-#define ID_BUTTON4                      32792
-#define ID_CHECK2                       32793
-#define ID_EDIT2                        32794
-#define ID_COMBO2                       32795
-#define ID_BUTTON5                      32796
-#define ID_SLIDER1                      32797
+#define ID_QUXIAN                       32790
+#define ID_PICK                         32800
+#define ID_CANCLE                       32802
+#define ID_LINELOAD                     32803
+#define ID_AUTOLINK                     32805
+#define ID_BUTTON2                      32806
+#define ID_WANDAO                       32806
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        315
-#define _APS_NEXT_COMMAND_VALUE         32798
+#define _APS_NEXT_COMMAND_VALUE         32807
 #define _APS_NEXT_CONTROL_VALUE         1000
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

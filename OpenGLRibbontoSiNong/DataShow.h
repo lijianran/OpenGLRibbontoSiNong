@@ -19,7 +19,6 @@ typedef struct
 	float x;
 	float y;
 	float z;
-
 }PointShow;
 //// 历史视角位置
 //struct ViewFocusM

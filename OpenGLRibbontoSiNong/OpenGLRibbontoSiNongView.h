@@ -13,7 +13,7 @@
 //
 
 #pragma once
-
+#include"stdafx.h"
 #include "DataShow.h"
 #include "GenerateRandomPoint.h"
 #include "CreDrawDatas.h"
@@ -29,7 +29,6 @@ public:
 
 // Operations
 public:
-	
 // Overrides
 public:
 	virtual void OnDraw(CDC* pDC);  // overridden to draw this view
@@ -57,10 +56,17 @@ Point pp;
 bool flag_GussianSimu;
 bool flag_DrawPoint;
 bool flag_DrawGps;
+bool flag_Link;
+
+int flag_select;
+int flag_selectid;
+
 int flag_points;
 int flag_lines;
 int flag_rectangle;
-
+int flag_quxian;
+int flag_lineload;
+int flag_wandao;
 
 DWORD Num_GussianRandomPoint;
 double m_GussianSigma;
@@ -71,6 +77,13 @@ bool DrawGPSPointonetoone();
 bool Drawpoint();
 bool Drawline();
 bool Drawrectangle();
+bool Drawquxian();
+bool Draw_LineLoad();
+bool Draw_wandao();
+int MouseSelect(double x,double y);
+bool JudgeToLink(int selectid,Point a,Point b);
+
+
 vector <Point> m_GpsDataBuffer;
 vector <Point> m_DrawGpsData;
 // Generated message map functions
@@ -79,6 +92,7 @@ protected:
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	DECLARE_MESSAGE_MAP()
+
 public:
 	afx_msg void OnPaint();
 //	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
@@ -108,6 +122,12 @@ public:
 	afx_msg void OnPoint();
 	afx_msg void OnLine();
 	afx_msg void OnRectangle();
+	afx_msg void OnQuxian();
+	afx_msg void OnPick();
+	afx_msg void OnCancle();
+	afx_msg void OnLineload();
+	afx_msg void OnAutolink();
+	afx_msg void OnWandao();
 };
 
 #ifndef _DEBUG  // debug version in OpenGLRibbontoSiNongView.cpp
